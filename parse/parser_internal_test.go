@@ -18,6 +18,7 @@ package parse
 
 import (
 	"errors"
+	"github.com/DE-labtory/koa/ast"
 	"testing"
 )
 
@@ -271,5 +272,43 @@ func TestExpectNext(t *testing.T) {
 				"got bool: %t, error: %d", i, test.expectedBool, test.expectedError, retBool, retError)
 		}
 		tokenBuf.Read()
+	}
+}
+
+func TestParseIdentifier(t *testing.T) {
+	tokenBuf := makeMockTokenBuffer()
+	tests := []struct {
+		expected ast.Expression
+	}{
+		{
+			expected: nil,
+		},
+		{
+			expected: &ast.Identifier{
+				Value: "ADD",
+			},
+		},
+		{
+			expected: nil,
+		},
+		{
+			expected: nil,
+		},
+		{
+			expected: nil,
+		},
+	}
+
+	for i, test := range tests {
+		identifier, _ := parseIdentifier(&tokenBuf)
+
+		if identifier != nil && test.expected != nil && identifier.String() == test.expected.String() {
+			tokenBuf.Read()
+		} else if identifier == nil && test.expected == nil {
+			tokenBuf.Read()
+		} else {
+			t.Fatalf("test[%d] - parseIdentifier() wrong result, expected=%s, got=%s",
+				i, test.expected, identifier)
+		}
 	}
 }

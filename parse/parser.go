@@ -182,9 +182,13 @@ func parseExpAsInfix(buf TokenBuffer, exp ast.Expression, pre precedence) (ast.E
 	return nil, nil
 }
 
-// TODO: implement me w/ test cases :-)
 func parseIdentifier(buf TokenBuffer) (ast.Expression, []error) {
-	return nil, nil
+	errs := make([]error, 0)
+	if buf.Peek(CURRENT).Type != Ident {
+		errs = append(errs, errors.New("parseIdentifier() - This is not a identifier"))
+		return nil, errs
+	}
+	return &ast.Identifier{Value: buf.Peek(CURRENT).Val}, nil
 }
 
 // TODO: implement me w/ test cases :-)
