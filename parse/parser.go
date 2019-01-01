@@ -16,7 +16,11 @@
 
 package parse
 
-import "github.com/DE-labtory/koa/ast"
+import (
+	"errors"
+
+	"github.com/DE-labtory/koa/ast"
+)
 
 type precedence int
 
@@ -90,9 +94,13 @@ func nextTokenIs(buf TokenBuffer, t TokenType) bool {
 // ExpectNext helps to check whether next token is
 // type of token we want, and if true then return it
 // otherwise return with error
-// TODO: implement me w/ test cases :-)
-func expectNext(buf TokenBuffer, t TokenType) (bool, Token, error) {
-	return false, Token{}, nil
+func expectNext(buf TokenBuffer, t TokenType) (bool, error) {
+	ret := buf.Peek(NEXT).Type == t
+	var err error = nil
+	if !ret {
+		err = errors.New("expectNext() : expecting token and next token are different")
+	}
+	return ret, err
 }
 
 func curPrecedence(buf TokenBuffer) precedence {
