@@ -86,6 +86,54 @@ func TestScopeGetter(t *testing.T) {
 		{
 			Scope{
 				map[string]Symbol{
+					"a": &String{&ast.Identifier{Value: "a"}},
+					"b": &Integer{&ast.Identifier{Value: "b"}},
+				},
+				&Scope{
+					map[string]Symbol{
+						"c": &Integer{&ast.Identifier{Value: "c"}},
+						"d": &String{&ast.Identifier{Value: "d"}},
+					},
+					&Scope{
+						map[string]Symbol{
+							"e": &Boolean{&ast.Identifier{Value: "e"}},
+							"f": &Integer{&ast.Identifier{Value: "f"}},
+						},
+						nil,
+					},
+				},
+			},
+			"g",
+			nil,
+			errors.New("g is not defined"),
+		},
+		{
+			Scope{
+				map[string]Symbol{
+					"a": &String{&ast.Identifier{Value: "a"}},
+					"b": &Integer{&ast.Identifier{Value: "b"}},
+				},
+				&Scope{
+					map[string]Symbol{
+						"c": &Integer{&ast.Identifier{Value: "c"}},
+						"d": &String{&ast.Identifier{Value: "d"}},
+					},
+					&Scope{
+						map[string]Symbol{
+							"e": &Boolean{&ast.Identifier{Value: "e"}},
+							"f": &Integer{&ast.Identifier{Value: "f"}},
+						},
+						nil,
+					},
+				},
+			},
+			"b",
+			&Integer{&ast.Identifier{Value: "b"}},
+			nil,
+		},
+		{
+			Scope{
+				map[string]Symbol{
 					"a": &Integer{&ast.Identifier{Value: "a"}},
 					"b": &Integer{&ast.Identifier{Value: "b"}},
 				},
